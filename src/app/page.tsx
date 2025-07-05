@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { Employee, Vehicle } from '@/types';
 import { employeeService, vehicleService } from '@/lib/firestore';
 import { 
-  TruckIcon, 
   UserGroupIcon, 
   ClipboardDocumentListIcon, 
   ChartBarIcon,
   CogIcon 
 } from '@heroicons/react/24/outline';
+import VanIcon from '@/components/icons/VanIcon';
 
 export default function Home() {
   const [availableVehicles, setAvailableVehicles] = useState<Vehicle[]>([]);
@@ -56,7 +56,7 @@ export default function Home() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <div className="text-center">
-              <TruckIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
+              <VanIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
               <p className="text-green-600 text-sm font-medium">가용차량</p>
               <p className="text-2xl font-bold text-green-900">{availableVehicles.length}대</p>
             </div>
@@ -72,7 +72,7 @@ export default function Home() {
           
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
             <div className="text-center">
-              <TruckIcon className="h-8 w-8 text-orange-600 mx-auto mb-2" />
+              <VanIcon className="h-8 w-8 text-orange-600 mx-auto mb-2" />
               <p className="text-orange-600 text-sm font-medium">퇴근차량</p>
               <p className="text-2xl font-bold text-orange-900">{allVehicles.filter(v => v.status === 'in_use').length}대</p>
             </div>

@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Employee, Vehicle, LeaveRecord, ExternalVehicle } from '@/types';
 import { employeeService, vehicleService, leaveRecordService, externalVehicleService } from '@/lib/firestore';
-import { TruckIcon, UserIcon, CheckIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { UserIcon, CheckIcon } from '@heroicons/react/24/outline';
+import VanIcon from '@/components/icons/VanIcon';
+import CarIcon from '@/components/icons/CarIcon';
 
 export default function LeaveCheckPage() {
   const router = useRouter();
@@ -15,6 +17,8 @@ export default function LeaveCheckPage() {
   const [selectedExternalVehicle, setSelectedExternalVehicle] = useState<ExternalVehicle | null>(null);
   const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
   const [todayLeaveRecords, setTodayLeaveRecords] = useState<LeaveRecord[]>([]);
+  const [editingRecord, setEditingRecord] = useState<LeaveRecord | null>(null);
+  const [editEmployees, setEditEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
@@ -76,6 +80,59 @@ export default function LeaveCheckPage() {
         return [...prev, employee];
       }
     });
+  };
+
+  const handleEditEmployeeToggle = (employee: Employee) => {
+    setEditEmployees(prev => {
+      const isSelected = prev.some(e => e.id === employee.id);
+      if (isSelected) {
+        return prev.filter(e => e.id !== employee.id);
+      } else {
+        return [...prev, employee];
+      }
+    });
+  };
+
+  const handleEditRecord = (record: LeaveRecord) => {
+    setEditingRecord(record);
+    setEditEmployees(record.employees.map(emp => {
+      const fullEmployee = workingEmployees.find(e => e.id === emp.id);
+      return fullEmployee || {
+        id: emp.id,
+        name: emp.name,
+        department: emp.department,
+        status: 'leaving' as const,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+    }));
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editingRecord || editEmployees.length === 0) return;
+
+    try {
+      const updatedRecord = {
+        ...editingRecord,
+        employees: editEmployees.map(emp => ({
+          id: emp.id,
+          name: emp.name,
+          department: emp.department
+        }))
+      };
+
+      await leaveRecordService.update(editingRecord.id, updatedRecord);
+      setEditingRecord(null);
+      setEditEmployees([]);
+    } catch (error) {
+      console.error('Error updating leave record:', error);
+      alert('레코드 수정 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingRecord(null);
+    setEditEmployees([]);
   };
 
   const handleSubmit = async () => {
@@ -162,7 +219,7 @@ export default function LeaveCheckPage() {
                   }`}
                 >
                   <div className="flex items-center space-x-3">
-                    <TruckIcon className="h-8 w-8 text-gray-600" />
+                    <VanIcon className="h-8 w-8 text-gray-600" />
                     <div>
                       <h3 className="font-semibold text-gray-900">{vehicle.name}</h3>
                       <p className="text-sm text-gray-500">
@@ -190,7 +247,7 @@ export default function LeaveCheckPage() {
                   }`}
                 >
                   <div className="flex items-center space-x-3">
-                    <PlusIcon className="h-8 w-8 text-gray-600" />
+                    <CarIcon className="h-8 w-8 text-gray-600" />
                     <div>
                       <h3 className="font-semibold text-gray-900">{vehicle.name}</h3>
                       <p className="text-sm text-gray-500">
@@ -289,9 +346,9 @@ export default function LeaveCheckPage() {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center space-x-3">
                       {record.vehicleType === 'external' ? (
-                        <PlusIcon className="h-5 w-5 text-purple-600" />
+                        <CarIcon className="h-5 w-5 text-purple-600" />
                       ) : (
-                        <TruckIcon className="h-5 w-5 text-blue-600" />
+                        <VanIcon className="h-5 w-5 text-blue-600" />
                       )}
                       <span className="font-semibold text-gray-900">{record.vehicleName}</span>
                       <span className="text-sm text-gray-500">
@@ -303,25 +360,102 @@ export default function LeaveCheckPage() {
                         </span>
                       )}
                     </div>
-                    <div className="text-sm text-gray-500">
-                      {record.leaveTime.toLocaleTimeString('ko-KR', { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                      })}
+                    <div className="flex items-center space-x-3">
+                      <div className="text-sm text-gray-500">
+                        {record.leaveTime.toLocaleTimeString('ko-KR', { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}
+                      </div>
+                      <button
+                        onClick={() => handleEditRecord(record)}
+                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      >
+                        수정
+                      </button>
                     </div>
                   </div>
-                  <div className="ml-8">
-                    <div className="flex flex-wrap gap-2">
-                      {record.employees.map((employee, index) => (
-                        <span 
-                          key={index}
-                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                  {editingRecord?.id === record.id ? (
+                    <div className="ml-8 mt-4">
+                      <h4 className="text-sm font-medium text-gray-700 mb-3">탑승 인원 수정 ({editEmployees.length}명)</h4>
+                      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-4">
+                        {workingEmployees.concat(
+                          record.employees
+                            .filter(emp => !workingEmployees.some(w => w.id === emp.id))
+                            .map(emp => ({
+                              id: emp.id,
+                              name: emp.name,
+                              department: emp.department,
+                              status: 'leaving' as const,
+                              createdAt: new Date(),
+                              updatedAt: new Date()
+                            }))
+                        ).map((employee) => (
+                          <button
+                            key={employee.id}
+                            onClick={() => handleEditEmployeeToggle(employee)}
+                            className={`p-2 rounded-lg border-2 transition-all text-center text-xs ${
+                              editEmployees.some(e => e.id === employee.id)
+                                ? 'border-blue-500 bg-blue-100 text-blue-900'
+                                : 'border-gray-200 hover:border-gray-300 bg-white'
+                            }`}
+                          >
+                            <div className="flex flex-col items-center space-y-1">
+                              <UserIcon className={`h-4 w-4 ${
+                                editEmployees.some(e => e.id === employee.id)
+                                  ? 'text-blue-600'
+                                  : 'text-gray-600'
+                              }`} />
+                              <div>
+                                <p className={`font-medium ${
+                                  editEmployees.some(e => e.id === employee.id)
+                                    ? 'text-blue-900'
+                                    : 'text-gray-900'
+                                }`}>{employee.name}</p>
+                                <p className={`text-xs ${
+                                  editEmployees.some(e => e.id === employee.id)
+                                    ? 'text-blue-700'
+                                    : 'text-gray-500'
+                                }`}>{employee.department}</p>
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={handleSaveEdit}
+                          disabled={editEmployees.length === 0}
+                          className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                            editEmployees.length > 0
+                              ? 'bg-blue-500 text-white hover:bg-blue-600'
+                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          }`}
                         >
-                          {employee.name} ({employee.department})
-                        </span>
-                      ))}
+                          저장
+                        </button>
+                        <button
+                          onClick={handleCancelEdit}
+                          className="px-4 py-2 rounded-lg text-sm font-medium bg-gray-300 text-gray-700 hover:bg-gray-400"
+                        >
+                          취소
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="ml-8">
+                      <div className="flex flex-wrap gap-2">
+                        {record.employees.map((employee, index) => (
+                          <span 
+                            key={index}
+                            className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                          >
+                            {employee.name} ({employee.department})
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

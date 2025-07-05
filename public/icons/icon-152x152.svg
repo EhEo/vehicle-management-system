@@ -1,0 +1,62 @@
+<svg width="152" height="152" viewBox="0 0 152 152" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vanGradient152" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shadowGradient152" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="76" cy="76" r="72" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+  
+  <!-- Van shadow -->
+  <ellipse cx="77" cy="113" rx="36" ry="6" fill="url(#shadowGradient152)" opacity="0.3"/>
+  
+  <!-- Van body -->
+  <rect x="40" y="59" width="72" height="36" rx="4" fill="url(#vanGradient152)" stroke="#1e40af" stroke-width="1"/>
+  
+  <!-- Van windshield -->
+  <rect x="95" y="62" width="15" height="18" rx="2" fill="#dbeafe" stroke="#3b82f6" stroke-width="1"/>
+  
+  <!-- Van side windows -->
+  <rect x="44" y="62" width="12" height="12" rx="1" fill="#dbeafe" stroke="#3b82f6" stroke-width="0.5"/>
+  <rect x="59" y="62" width="12" height="12" rx="1" fill="#dbeafe" stroke="#3b82f6" stroke-width="0.5"/>
+  <rect x="74" y="62" width="12" height="12" rx="1" fill="#dbeafe" stroke="#3b82f6" stroke-width="0.5"/>
+  
+  <!-- Van front bumper -->
+  <rect x="110" y="71" width="4" height="12" rx="1" fill="#1e40af"/>
+  
+  <!-- Van wheels -->
+  <circle cx="50" cy="101" r="8" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  <circle cx="50" cy="101" r="5" fill="#6b7280"/>
+  <circle cx="50" cy="101" r="3" fill="#9ca3af"/>
+  
+  <circle cx="95" cy="101" r="8" fill="#374151" stroke="#1f2937" stroke-width="1"/>
+  <circle cx="95" cy="101" r="5" fill="#6b7280"/>
+  <circle cx="95" cy="101" r="3" fill="#9ca3af"/>
+  
+  <!-- Van headlight -->
+  <circle cx="112" cy="65" r="2" fill="#fbbf24" stroke="#f59e0b" stroke-width="0.5"/>
+  
+  <!-- Van door handle -->
+  <rect x="83" y="77" width="2" height="1" rx="0.5" fill="#1e40af"/>
+  
+  <!-- Management symbol (clipboard/checklist) -->
+  <rect x="56" y="38" width="12" height="15" rx="1" fill="#ffffff" stroke="#3b82f6" stroke-width="1"/>
+  <rect x="58" y="41" width="8" height="1" rx="0.25" fill="#3b82f6"/>
+  <rect x="58" y="44" width="7" height="1" rx="0.25" fill="#3b82f6"/>
+  <rect x="58" y="47" width="6" height="1" rx="0.25" fill="#3b82f6"/>
+  <circle cx="59" cy="41.5" r="0.5" fill="#10b981"/>
+  <circle cx="59" cy="44.5" r="0.5" fill="#10b981"/>
+  
+  <!-- Management symbol (wrench) -->
+  <g transform="translate(83, 41)">
+    <rect x="0" y="3" width="1" height="6" rx="0.5" fill="#6b7280"/>
+    <rect x="0" y="2" width="2" height="2" rx="0.5" fill="#6b7280"/>
+    <rect x="0" y="8" width="2" height="2" rx="0.5" fill="#6b7280"/>
+  </g>
+</svg>
