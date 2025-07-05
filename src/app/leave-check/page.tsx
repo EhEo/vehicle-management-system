@@ -15,7 +15,6 @@ export default function LeaveCheckPage() {
   const [selectedExternalVehicle, setSelectedExternalVehicle] = useState<ExternalVehicle | null>(null);
   const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
   const [todayLeaveRecords, setTodayLeaveRecords] = useState<LeaveRecord[]>([]);
-  const [vehicleType, setVehicleType] = useState<'company' | 'external'>('company');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
@@ -132,146 +131,84 @@ export default function LeaveCheckPage() {
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-2xl font-bold text-gray-900 mb-6">퇴근 체크</h1>
 
-          {/* 차량 타입 선택 */}
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">차량 타입</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                onClick={() => {
-                  setVehicleType('company');
-                  setSelectedExternalVehicle(null);
-                  setSelectedEmployees([]);
-                }}
-                className={`p-4 rounded-lg border-2 transition-all ${
-                  vehicleType === 'company'
-                    ? 'border-blue-500 bg-blue-50 text-blue-900'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <div className="text-center">
-                  <TruckIcon className="h-8 w-8 mx-auto mb-2 text-gray-600" />
-                  <p className="font-medium">회사 차량</p>
-                  <p className="text-sm text-gray-500">등록된 회사 차량</p>
-                </div>
-              </button>
-              <button
-                onClick={() => {
-                  setVehicleType('external');
-                  setSelectedVehicle(null);
-                  setSelectedEmployees([]);
-                }}
-                className={`p-4 rounded-lg border-2 transition-all ${
-                  vehicleType === 'external'
-                    ? 'border-blue-500 bg-blue-50 text-blue-900'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <div className="text-center">
-                  <PlusIcon className="h-8 w-8 mx-auto mb-2 text-gray-600" />
-                  <p className="font-medium">외부 차량</p>
-                  <p className="text-sm text-gray-500">택시, 개인차량 등</p>
-                </div>
-              </button>
-            </div>
-          </div>
-
           {/* 차량 선택 */}
-          {vehicleType === 'company' && (
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">회사 차량 선택</h2>
-                {selectedVehicle && (
-                  <button
-                    onClick={() => setSelectedVehicle(null)}
-                    className="text-sm text-blue-600 hover:text-blue-800"
-                  >
-                    차량 변경
-                  </button>
-                )}
-              </div>
-              {availableVehicles.length > 0 ? (
-                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                  {availableVehicles
-                    .filter(vehicle => !selectedVehicle || vehicle.id === selectedVehicle.id)
-                    .map((vehicle) => (
-                    <button
-                      key={vehicle.id}
-                      onClick={() => handleVehicleSelect(vehicle)}
-                      className={`p-4 rounded-lg border-2 transition-all text-left ${
-                        selectedVehicle?.id === vehicle.id
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <TruckIcon className="h-8 w-8 text-gray-600" />
-                        <div>
-                          <h3 className="font-semibold text-gray-900">{vehicle.name}</h3>
-                          <p className="text-sm text-gray-500">
-                            {vehicle.driverName} ({vehicle.driverPhone})
-                          </p>
-                        </div>
-                        {selectedVehicle?.id === vehicle.id && (
-                          <CheckIcon className="h-5 w-5 text-blue-500 ml-auto" />
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-500 text-center py-8">사용 가능한 차량이 없습니다.</p>
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">차량 선택</h2>
+              {(selectedVehicle || selectedExternalVehicle) && (
+                <button
+                  onClick={() => {
+                    setSelectedVehicle(null);
+                    setSelectedExternalVehicle(null);
+                  }}
+                  className="text-sm text-blue-600 hover:text-blue-800"
+                >
+                  차량 변경
+                </button>
               )}
             </div>
-          )}
-
-          {/* 외부 차량 선택 */}
-          {vehicleType === 'external' && (
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">외부 차량 선택</h2>
-                {selectedExternalVehicle && (
-                  <button
-                    onClick={() => setSelectedExternalVehicle(null)}
-                    className="text-sm text-blue-600 hover:text-blue-800"
-                  >
-                    차량 변경
-                  </button>
-                )}
-              </div>
-              {externalVehicles.length > 0 ? (
-                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                  {externalVehicles
-                    .filter(vehicle => !selectedExternalVehicle || vehicle.id === selectedExternalVehicle.id)
-                    .map((vehicle) => (
-                    <button
-                      key={vehicle.id}
-                      onClick={() => handleExternalVehicleSelect(vehicle)}
-                      className={`p-4 rounded-lg border-2 transition-all text-left ${
-                        selectedExternalVehicle?.id === vehicle.id
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <PlusIcon className="h-8 w-8 text-gray-600" />
-                        <div>
-                          <h3 className="font-semibold text-gray-900">{vehicle.name}</h3>
-                          <p className="text-sm text-gray-500">
-                            {vehicle.type === 'taxi' ? '택시' : vehicle.type === 'personal' ? '개인차량' : '기타'}
-                          </p>
-                        </div>
-                        {selectedExternalVehicle?.id === vehicle.id && (
-                          <CheckIcon className="h-5 w-5 text-blue-500 ml-auto" />
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-500 text-center py-8">등록된 외부 차량이 없습니다.</p>
-              )}
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+              {/* 회사 차량 목록 */}
+              {availableVehicles
+                .filter(vehicle => !selectedVehicle || vehicle.id === selectedVehicle.id)
+                .map((vehicle) => (
+                <button
+                  key={vehicle.id}
+                  onClick={() => handleVehicleSelect(vehicle)}
+                  className={`p-4 rounded-lg border-2 transition-all text-left ${
+                    selectedVehicle?.id === vehicle.id
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <TruckIcon className="h-8 w-8 text-gray-600" />
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{vehicle.name}</h3>
+                      <p className="text-sm text-gray-500">
+                        {vehicle.driverName} ({vehicle.driverPhone})
+                      </p>
+                    </div>
+                    {selectedVehicle?.id === vehicle.id && (
+                      <CheckIcon className="h-5 w-5 text-blue-500 ml-auto" />
+                    )}
+                  </div>
+                </button>
+              ))}
+              
+              {/* 외부 차량 목록 */}
+              {externalVehicles
+                .filter(vehicle => !selectedExternalVehicle || vehicle.id === selectedExternalVehicle.id)
+                .map((vehicle) => (
+                <button
+                  key={`external-${vehicle.id}`}
+                  onClick={() => handleExternalVehicleSelect(vehicle)}
+                  className={`p-4 rounded-lg border-2 transition-all text-left ${
+                    selectedExternalVehicle?.id === vehicle.id
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <PlusIcon className="h-8 w-8 text-gray-600" />
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{vehicle.name}</h3>
+                      <p className="text-sm text-gray-500">
+                        {vehicle.type === 'taxi' ? '택시' : vehicle.type === 'personal' ? '개인차량' : '기타'}
+                      </p>
+                    </div>
+                    {selectedExternalVehicle?.id === vehicle.id && (
+                      <CheckIcon className="h-5 w-5 text-blue-500 ml-auto" />
+                    )}
+                  </div>
+                </button>
+              ))}
             </div>
-          )}
+            
+            {availableVehicles.length === 0 && externalVehicles.length === 0 && (
+              <p className="text-gray-500 text-center py-8">사용 가능한 차량이 없습니다.</p>
+            )}
+          </div>
 
           {/* 직원 선택 */}
           {(selectedVehicle || selectedExternalVehicle) && (
@@ -351,11 +288,20 @@ export default function LeaveCheckPage() {
                 <div key={record.id} className="bg-gray-50 p-4 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center space-x-3">
-                      <TruckIcon className="h-5 w-5 text-blue-600" />
+                      {record.vehicleType === 'external' ? (
+                        <PlusIcon className="h-5 w-5 text-purple-600" />
+                      ) : (
+                        <TruckIcon className="h-5 w-5 text-blue-600" />
+                      )}
                       <span className="font-semibold text-gray-900">{record.vehicleName}</span>
                       <span className="text-sm text-gray-500">
                         ({record.employees.length}명)
                       </span>
+                      {record.vehicleType === 'external' && (
+                        <span className="text-xs px-2 py-1 bg-purple-100 text-purple-800 rounded-full">
+                          외부차량
+                        </span>
+                      )}
                     </div>
                     <div className="text-sm text-gray-500">
                       {record.leaveTime.toLocaleTimeString('ko-KR', { 
