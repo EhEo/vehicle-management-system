@@ -120,9 +120,6 @@ export default function VehiclesPage() {
                 기사명
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                연락처
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 상태
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -143,9 +140,6 @@ export default function VehiclesPage() {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {vehicle.driverName}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {vehicle.driverPhone}
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(vehicle.status)}`}>
                     {getStatusText(vehicle.status)}
@@ -154,15 +148,15 @@ export default function VehiclesPage() {
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
                     onClick={() => handleEdit(vehicle)}
-                    className="text-blue-600 hover:text-blue-900 mr-3"
+                    className="text-blue-600 hover:text-blue-900 mr-3 p-2 rounded-lg hover:bg-blue-50 transition-colors"
                   >
-                    <PencilIcon className="h-4 w-4" />
+                    <PencilIcon className="h-5 w-5 md:h-4 md:w-4" />
                   </button>
                   <button
                     onClick={() => handleDelete(vehicle.id)}
-                    className="text-red-600 hover:text-red-900"
+                    className="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-colors"
                   >
-                    <TrashIcon className="h-4 w-4" />
+                    <TrashIcon className="h-5 w-5 md:h-4 md:w-4" />
                   </button>
                 </td>
               </tr>

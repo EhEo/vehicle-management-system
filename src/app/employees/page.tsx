@@ -139,15 +139,15 @@ export default function EmployeesPage() {
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
                     onClick={() => handleEdit(employee)}
-                    className="text-blue-600 hover:text-blue-900 mr-3"
+                    className="text-blue-600 hover:text-blue-900 mr-3 p-2 rounded-lg hover:bg-blue-50 transition-colors"
                   >
-                    <PencilIcon className="h-4 w-4" />
+                    <PencilIcon className="h-5 w-5 md:h-4 md:w-4" />
                   </button>
                   <button
                     onClick={() => handleDelete(employee.id)}
-                    className="text-red-600 hover:text-red-900"
+                    className="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-colors"
                   >
-                    <TrashIcon className="h-4 w-4" />
+                    <TrashIcon className="h-5 w-5 md:h-4 md:w-4" />
                   </button>
                 </td>
               </tr>
