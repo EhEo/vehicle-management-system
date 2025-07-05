@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react';
 import { LeaveRecord } from '@/types';
 import { leaveRecordService } from '@/lib/firestore';
-import { CalendarIcon, TruckIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import { CalendarIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import VanIcon from '@/components/icons/VanIcon';
+import CarIcon from '@/components/icons/CarIcon';
 
 export default function ReportsPage() {
   const [leaveRecords, setLeaveRecords] = useState<LeaveRecord[]>([]);
@@ -129,7 +131,7 @@ export default function ReportsPage() {
                   <p className="text-blue-600 text-sm font-medium">총 퇴근 건수</p>
                   <p className="text-2xl font-bold text-blue-900">{stats.totalRecords}건</p>
                 </div>
-                <TruckIcon className="h-8 w-8 text-blue-600" />
+                <VanIcon className="h-8 w-8 text-blue-600" />
               </div>
             </div>
             
@@ -149,7 +151,7 @@ export default function ReportsPage() {
                   <p className="text-purple-600 text-sm font-medium">사용 차량</p>
                   <p className="text-2xl font-bold text-purple-900">{stats.uniqueVehicles}대</p>
                 </div>
-                <TruckIcon className="h-8 w-8 text-purple-600" />
+                <VanIcon className="h-8 w-8 text-purple-600" />
               </div>
             </div>
           </div>
@@ -160,7 +162,7 @@ export default function ReportsPage() {
               getDateGroups().map(([date, records]) => (
                 <div key={date} className="border border-gray-200 rounded-lg p-4">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    {formatDate(date)} ({records.length}건)
+                    {formatDate(date)} <span className="text-blue-600 font-bold">({records.length}건)</span>
                   </h3>
                   
                   <div className="space-y-3">
@@ -168,16 +170,25 @@ export default function ReportsPage() {
                       <div key={record.id} className="bg-gray-50 rounded-lg p-4">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center space-x-3">
-                            <TruckIcon className="h-5 w-5 text-gray-600" />
+                            {record.vehicleType === 'external' ? (
+                              <CarIcon className="h-5 w-5 text-purple-600" />
+                            ) : (
+                              <VanIcon className="h-5 w-5 text-blue-600" />
+                            )}
                             <span className="font-medium text-gray-900">
                               {record.vehicleName}
                             </span>
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm text-gray-800 font-medium">
                               {record.leaveTime.toLocaleTimeString('ko-KR', {
                                 hour: '2-digit',
                                 minute: '2-digit'
                               })}
                             </span>
+                            {record.vehicleType === 'external' && (
+                              <span className="text-xs px-2 py-1 bg-purple-100 text-purple-800 rounded-full">
+                                외부차량
+                              </span>
+                            )}
                           </div>
                           <span className="text-sm text-gray-500">
                             {record.employees.length}명
