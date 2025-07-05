@@ -13,7 +13,7 @@ import {
   Timestamp 
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { Employee, Vehicle, LeaveRecord } from '@/types';
+import { Employee, Vehicle, LeaveRecord, ExternalVehicle } from '@/types';
 
 export const employeeService = {
   async getAll(): Promise<Employee[]> {
@@ -240,6 +240,57 @@ export const leaveRecordService = {
           updatedAt: doc.data().updatedAt?.toDate() || new Date(),
         })) as LeaveRecord[];
         callback(records);
+      }
+    );
+  },
+};
+
+export const externalVehicleService = {
+  async getAll(): Promise<ExternalVehicle[]> {
+    const querySnapshot = await getDocs(
+      query(collection(db, 'externalVehicles'), orderBy('name'))
+    );
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt?.toDate() || new Date(),
+      updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+    })) as ExternalVehicle[];
+  },
+
+  async create(vehicle: Omit<ExternalVehicle, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    const docRef = await addDoc(collection(db, 'externalVehicles'), {
+      ...vehicle,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    });
+    return docRef.id;
+  },
+
+  async update(id: string, updates: Partial<ExternalVehicle>): Promise<void> {
+    const docRef = doc(db, 'externalVehicles', id);
+    await updateDoc(docRef, {
+      ...updates,
+      updatedAt: Timestamp.now(),
+    });
+  },
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(db, 'externalVehicles', id);
+    await deleteDoc(docRef);
+  },
+
+  onSnapshot(callback: (vehicles: ExternalVehicle[]) => void) {
+    return onSnapshot(
+      query(collection(db, 'externalVehicles'), orderBy('name')),
+      (querySnapshot) => {
+        const vehicles = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() || new Date(),
+          updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+        })) as ExternalVehicle[];
+        callback(vehicles);
       }
     );
   },

@@ -33,28 +33,28 @@ const initialData = {
   vehicles: [
     { 
       name: '1호차', 
-      plateNumber: '12가1234',
+      plateNumber: '29LD-326.88',
       driverName: 'Thao', 
       driverPhone: '0949-218-180', 
       status: 'available' 
     },
     { 
       name: '2호차', 
-      plateNumber: '34나5678',
+      plateNumber: '29LD-326.97',
       driverName: 'Hung', 
       driverPhone: '0968-915-516', 
       status: 'available' 
     },
     { 
       name: '3호차', 
-      plateNumber: '56다9012',
+      plateNumber: '30L-687.26',
       driverName: 'Tho', 
       driverPhone: '0345-821-987', 
       status: 'available' 
     },
     { 
       name: '4호차', 
-      plateNumber: '78라3456',
+      plateNumber: '30M-442.70',
       driverName: 'Chau', 
       driverPhone: '0979-222-385', 
       status: 'available' 

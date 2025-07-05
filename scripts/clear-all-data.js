@@ -16,7 +16,7 @@ async function clearAllData() {
     console.log('모든 데이터 삭제 시작...');
     
     // 모든 컬렉션 삭제
-    const collections = ['employees', 'vehicles', 'leaveRecords'];
+    const collections = ['employees', 'vehicles', 'leaveRecords', 'externalVehicles'];
     
     for (const collectionName of collections) {
       const snapshot = await db.collection(collectionName).get();

@@ -31,6 +31,8 @@ export interface LeaveRecord {
   date: string;
   vehicleId: string;
   vehicleName: string;
+  vehicleType: 'company' | 'external'; // 회사 차량 또는 외부 차량
+  externalVehicleType?: 'taxi' | 'personal' | 'external'; // 외부 차량인 경우 세부 타입
   employees: {
     id: string;
     name: string;

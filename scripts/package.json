@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "init-data.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init-data": "node init-data.js",
+    "clear-all-data": "node clear-all-data.js",
+    "seed-external-vehicles": "node seed-external-vehicles.js"
   },
   "keywords": [],
   "author": "",
