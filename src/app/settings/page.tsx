@@ -51,7 +51,7 @@ export default function SettingsPage() {
           <h1 className="text-2xl font-bold text-gray-900 mb-6">설정</h1>
 
           {/* 기본 관리 메뉴 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Link
               href="/employees"
               className="bg-blue-50 border border-blue-200 rounded-lg p-6 hover:bg-blue-100 transition-colors"
@@ -78,6 +78,21 @@ export default function SettingsPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">차량 관리</h3>
                   <p className="text-gray-600">차량 정보 등록, 수정, 삭제</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/external-vehicles"
+              className="bg-purple-50 border border-purple-200 rounded-lg p-6 hover:bg-purple-100 transition-colors"
+            >
+              <div className="flex items-center space-x-4">
+                <div className="bg-purple-100 p-3 rounded-full">
+                  <TruckIcon className="h-8 w-8 text-purple-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">외부차량 관리</h3>
+                  <p className="text-gray-600">택시, 개인차량 등록, 수정, 삭제</p>
                 </div>
               </div>
             </Link>
