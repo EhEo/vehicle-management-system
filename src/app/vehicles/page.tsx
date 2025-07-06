@@ -182,7 +182,7 @@ export default function VehiclesPage() {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   required
                 />
               </div>
@@ -194,7 +194,7 @@ export default function VehiclesPage() {
                   type="text"
                   value={formData.plateNumber}
                   onChange={(e) => setFormData({ ...formData, plateNumber: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   placeholder="예: 12가1234"
                   required
                 />
@@ -207,7 +207,7 @@ export default function VehiclesPage() {
                   type="text"
                   value={formData.driverName}
                   onChange={(e) => setFormData({ ...formData, driverName: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   required
                 />
               </div>
@@ -219,7 +219,7 @@ export default function VehiclesPage() {
                   type="tel"
                   value={formData.driverPhone}
                   onChange={(e) => setFormData({ ...formData, driverPhone: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   required
                 />
               </div>
@@ -230,7 +230,7 @@ export default function VehiclesPage() {
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value as Vehicle['status'] })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 >
                   <option value="available">가용차량</option>
                   <option value="in_use">퇴근차량</option>
