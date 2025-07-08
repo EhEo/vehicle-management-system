@@ -3,9 +3,11 @@ import { dailyReset } from '@/lib/reset';
 
 export async function POST(request: NextRequest) {
   try {
-    // Vercel cron job 인증 확인
+    // Vercel cron job 인증 확인 (개발환경에서는 생략)
     const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    const expectedAuth = `Bearer ${process.env.CRON_SECRET}`;
+    
+    if (process.env.NODE_ENV === 'production' && authHeader !== expectedAuth) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
