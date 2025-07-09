@@ -19,14 +19,14 @@ export async function dailyReset() {
     
     // 모든 차량을 가용 상태로 변경
     for (const vehicle of vehicles) {
-      if (vehicle.status === 'in_use') {
+      if (vehicle.status !== 'available') {
         await vehicleService.update(vehicle.id, { status: 'available' });
       }
     }
     
     // 모든 직원을 근무 상태로 변경
     for (const employee of employees) {
-      if (employee.status === 'leaving') {
+      if (employee.status !== 'working') {
         await employeeService.update(employee.id, { status: 'working' });
       }
     }
