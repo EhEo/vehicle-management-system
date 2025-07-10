@@ -17,16 +17,16 @@ export async function dailyReset() {
       }
     }
     
-    // 모든 차량을 가용 상태로 변경
+    // 퇴근한 차량만 가용 상태로 변경 (외근, 수리중 제외)
     for (const vehicle of vehicles) {
-      if (vehicle.status !== 'available') {
+      if (vehicle.status === 'in_use') {
         await vehicleService.update(vehicle.id, { status: 'available' });
       }
     }
     
-    // 모든 직원을 근무 상태로 변경
+    // 퇴근한 직원만 근무 상태로 변경 (휴가, 출장, 외근 제외)
     for (const employee of employees) {
-      if (employee.status !== 'working') {
+      if (employee.status === 'leaving') {
         await employeeService.update(employee.id, { status: 'working' });
       }
     }
