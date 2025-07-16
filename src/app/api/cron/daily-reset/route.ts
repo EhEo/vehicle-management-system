@@ -3,15 +3,23 @@ import { dailyReset } from '@/lib/reset';
 
 export async function POST(request: NextRequest) {
   try {
-    // Vercel cron job 인증 확인 (개발환경에서는 생략)
-    const authHeader = request.headers.get('authorization');
-    const expectedAuth = `Bearer ${process.env.CRON_SECRET}`;
+    // Vercel cron job은 자동으로 Authorization 헤더를 설정하지 않음
+    // 대신 cron-secret 헤더를 사용하거나 인증을 생략
+    const cronSecret = request.headers.get('x-vercel-cron-secret') || 
+                      request.headers.get('authorization')?.replace('Bearer ', '');
     
-    if (process.env.NODE_ENV === 'production' && authHeader !== expectedAuth) {
+    // 프로덕션에서만 인증 확인 (Vercel의 자동 크론은 x-vercel-cron-secret 사용)
+    if (process.env.NODE_ENV === 'production' && 
+        cronSecret !== process.env.CRON_SECRET &&
+        !request.headers.get('x-vercel-cron-secret')) {
+      console.log('Cron auth failed - cronSecret:', cronSecret, 'expected:', process.env.CRON_SECRET);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log('Daily reset cron job started at:', new Date().toISOString());
+    const currentTime = new Date();
+    const vietnamTime = new Date(currentTime.getTime() + (7 * 60 * 60 * 1000)); // UTC+7
+    console.log('Daily reset cron job started at:', currentTime.toISOString());
+    console.log('Vietnam time:', vietnamTime.toLocaleString('ko-KR', { timeZone: 'Asia/Ho_Chi_Minh' }));
     
     const result = await dailyReset();
     
