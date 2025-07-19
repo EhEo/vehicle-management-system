@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // 테스트용 cron job 호출
     const response = await fetch(`${process.env.VERCEL_URL || 'http://localhost:3000'}/api/cron/daily-reset`, {

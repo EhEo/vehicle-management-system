@@ -17,13 +17,16 @@ export async function POST(request: NextRequest) {
     }
 
     const currentTime = new Date();
-    const vietnamTime = new Date(currentTime.getTime() + (7 * 60 * 60 * 1000)); // UTC+7
     console.log('Daily reset cron job started at:', currentTime.toISOString());
-    console.log('Vietnam time:', vietnamTime.toLocaleString('ko-KR', { timeZone: 'Asia/Ho_Chi_Minh' }));
+    console.log('Cron triggered at Vietnam time:', currentTime.toLocaleString('ko-KR', { timeZone: 'Asia/Ho_Chi_Minh' }));
     
     const result = await dailyReset();
     
-    console.log('Daily reset cron job completed:', result);
+    console.log('Daily reset cron job completed:', {
+      success: result.success,
+      message: result.message,
+      ...(result.details && { details: result.details })
+    });
     
     return NextResponse.json(result);
   } catch (error) {
